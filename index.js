@@ -28,7 +28,7 @@ const paymentRoutes = require("./routes/payment");
 
 // app.use("/modern-mobiles/productList/", productRoutes)
 app.use("/modern-mobiles/product/", productRoutes)
-app.post("/modern-mobiles/upload/", uploadData)
+// app.post("/modern-mobiles/upload/", uploadData)
 app.use("/modern-mobiles/auth/", authUser)
 app.use("/modern-mobiles/profile/", profileRoutes)
 app.use("/modern-mobiles/payment/", paymentRoutes)
