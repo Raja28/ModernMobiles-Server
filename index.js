@@ -27,11 +27,11 @@ const profileRoutes = require("./routes/profile");
 const paymentRoutes = require("./routes/payment");
 
 // app.use("/modern-mobiles/productList/", productRoutes)
-app.use("/modern-mobiles/product/", productRoutes)
+app.use("/product/", productRoutes)
 // app.post("/modern-mobiles/upload/", uploadData)
-app.use("/modern-mobiles/auth/", authUser)
-app.use("/modern-mobiles/profile/", profileRoutes)
-app.use("/modern-mobiles/payment/", paymentRoutes)
+app.use("/auth/", authUser)
+app.use("/profile/", profileRoutes)
+app.use("/payment/", paymentRoutes)
 
 connectDB()
 
