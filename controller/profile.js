@@ -14,6 +14,13 @@ exports.updateUser = async (req, res) => {
         }
 
         const userData = await UserModel.findOne({ email: user.email })
+            .populate({
+                path: 'address',
+                options: {
+                    sort: { createdAt: -1 }
+                },
+            })
+            
         if (firstName) {
             userData.firstName = firstName
         }
@@ -76,7 +83,7 @@ exports.addAddress = async (req, res) => {
             { "new": true }
         ).populate({
             path: "address",
-            options:{sort: {'createdAt': -1}}
+            options: { sort: { 'createdAt': -1 } }
         })
         // .sort({createdAt: -1})
         //.populate({path: 'address', options: { sort: {createdAt: -1} } })
