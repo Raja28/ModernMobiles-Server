@@ -10,7 +10,6 @@ exports.sendOTP = async (req, res) => {
 
     try {
         const { email } = req.body
-        // console.log(otpGenerator.timestamp.format());
 
         if (!email) {
             return res.status(400).json({
@@ -149,9 +148,6 @@ exports.login = async (req, res) => {
                 }
             })
             .exec();
-        // console.log(user);
-
-
 
         if (!user) {
             return res.status(400).json({
@@ -197,7 +193,6 @@ exports.login = async (req, res) => {
                 user,
                 token
             })
-
         }
 
     } catch (error) {

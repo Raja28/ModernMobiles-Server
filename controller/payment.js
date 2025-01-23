@@ -6,12 +6,10 @@ const path = require("path");
 const { orderEmail } = require("../utils/mailTemplates/orderTemplate");
 const { orderMailSender } = require("../utils/mailSender");
 
-
 require("dotenv").config()
 
 
 exports.capturePayment = async (req, res) => {
-
 
     try {
         const { total } = req.body
@@ -41,7 +39,6 @@ exports.capturePayment = async (req, res) => {
 
             return res.status(200).json({
                 success: true,
-                // message: "Purchase Successfull",
                 data: paymentResponse
 
             })
@@ -120,38 +117,8 @@ exports.verifyPaymnet = async (req, res) => {
                 "Order Confirmation",
                 orderEmail(`${userData.firstName} ${userData.lastName}` ,razorpay_order_id, amount, receipt)
             )
-           
-            
-            // .populate("wishlist")
-            //     .populate({
-            //         path: "address",
-            //         options: {
-            //             sort: { createdAt: -1 }
-            //         }
-            //     })
-            //     .populate("orders")
-            //     .populate({
-            //         path: "orders",
-            //         populate: {
-            //             path: "cartId",
-            //             populate: {
-            //                 path: "product"
-            //             }
-            //         }
-            //     })
-            //     .populate({
-            //         path: "orders",
-            //         populate: {
-            //             path: "address",
-            //             options: {
-            //                 sort: { createdAt: -1 }
-            //             }
-            //         }
-            //     })
-            //     .exec()
 
-            // console.log("userData after orderCreation", userDetail);
-            // console.log("orderDetail", orderDetail)
+     
 
             return res.status(200).json({
                 success: true,
@@ -176,93 +143,3 @@ exports.verifyPaymnet = async (req, res) => {
         })
     }
 }
-
-// exports.createOrder = async (user, amount, res) => {
-//     try {
-//         const { email, _id } = user
-//         const { deliveryAddressId } = req.body
-
-//         if (!email || !_id) {
-//             return res.status(501).json({
-//                 success: false,
-//                 message: "Please Provide User Email or ID"
-//             })
-//         }
-//         if (!deliveryAddressId) {
-//             return res.status(501).json({
-//                 success: false,
-//                 message: "Please Provide Delivery Address"
-//             })
-//         }
-
-//         const userData = await UserModel.findById(_id)
-//         console.log("creating order");
-
-//         const orderDetail = await OrdersModel.create({
-//             user: _id,
-//             cartId: [...userData.cart],
-//             address: deliveryAddressId,
-//             totalPrice: amount
-//         })
-
-//         userData.cart = []
-//         userData.save()
-//         console.log("userData after orderCreation", userData);
-
-//         return orderDetail
-
-//     } catch (error) {
-
-//     }
-// }
-
-// exports.TestingCode = async (req, res) => {
-//     try {
-//         const { id } = req.body
-
-//         if (!id) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "User Id Required"
-//             })
-//         }
-
-//         const userDetail = await UserModel.findById(id).select("orders")
-//             // .populate("orders")
-//             .populate({
-//                 path: "orders",
-                
-//                 populate: {
-//                     path: "cartId",
-
-//                     populate: {
-//                         path: "product",
-//                     },
-//                 },
-//             })
-//             .populate({
-//                 path: "orders",
-//                 options: { sort: { createdAt: -1 } },
-//                 populate: {
-//                     path: "address",
-//                     // options: {
-//                     //     sort: { 'createdAt': -1 }
-//                     // }
-//                 }
-//             })
-//             .exec()
-
-
-//         res.status(200).json({
-//             success: true,
-//             message: "Data Fetched Successfully",
-//             orderDetail: userDetail
-//         })
-
-//     } catch (error) {
-//         res.status(501).json({
-//             success: false,
-//             message: "Error Fetching order Details"
-//         })
-//     }
-// }

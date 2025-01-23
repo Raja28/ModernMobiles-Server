@@ -26,9 +26,7 @@ const { uploadData } = require("./controller/uploadData");
 const profileRoutes = require("./routes/profile");
 const paymentRoutes = require("./routes/payment");
 
-// app.use("/modern-mobiles/productList/", productRoutes)
 app.use("/product/", productRoutes)
-// app.post("/modern-mobiles/upload/", uploadData)
 app.use("/auth/", authUser)
 app.use("/profile/", profileRoutes)
 app.use("/payment/", paymentRoutes)

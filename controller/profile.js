@@ -85,16 +85,12 @@ exports.addAddress = async (req, res) => {
             path: "address",
             options: { sort: { 'createdAt': -1 } }
         })
-        // .sort({createdAt: -1})
-        //.populate({path: 'address', options: { sort: {createdAt: -1} } })
-        // const sortedAddress = userData.address.sort((add1, add2) => add2.createdAt - add1.createdAt)
 
         if (userData) {
             res.status(200).json({
                 success: true,
                 message: "Address Added Successfully",
                 address: userData.address
-                // address: userData.address
             })
         }
 
@@ -117,7 +113,6 @@ exports.deleteAddress = async (req, res) => {
 
 
         const deletedAddress = await AddressModel.findByIdAndDelete(addressId);
-        // console.log("deletedAddress", deletedAddress);
 
         const userData = await UserModel.findOneAndUpdate({ _id: user._id },
             {
@@ -127,10 +122,7 @@ exports.deleteAddress = async (req, res) => {
             }
         ).populate("address");
 
-        // console.log("userData", userData);
-
         const sortedAddress = userData?.address.sort((add1, add2) => add2.createdAt - add1.createdAt)
-        // console.log("sortedAddress", sortedAddress);
 
         res.status(200).json({
             success: true,
@@ -189,8 +181,7 @@ exports.updateAddress = async (req, res) => {
         addressData.save()
 
         const userData = await UserModel.findOne({ email: user.email }).populate("address")
-        // .sort({createdAt: -1})
-        //.populate({path: 'address', options: { sort: {createdAt: -1} } })
+
         const sortedAddress = userData.address.sort((add1, add2) => add2.createdAt - add1.createdAt)
 
         res.status(200).json({

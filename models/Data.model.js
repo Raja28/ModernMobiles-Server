@@ -1,10 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const data = mongoose.Schema({
-    // productId: {
-    //     type: String,
-    //      required: true,: true,
-    // },
+
     brand: {
         type: String,
         required: true, d: true,

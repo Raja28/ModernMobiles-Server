@@ -2,11 +2,21 @@ const { findByIdAndUpdate } = require("../models/Address.model");
 const CartModel = require("../models/Cart.model");
 const DataModel = require("../models/Data.model");
 const UserModel = require("../models/User.model");
-// import { ObjectId } from 'mongodb'
+
 
 exports.getProductsByBrand = async (req, res) => {
+    const allProduct = 'View All'
     try {
         const { brand } = req.params
+
+        if (brand == allProduct) {
+            const response = await DataModel.find()
+            return res.status(200).json({
+                success: true,
+                message: "Data fetched successfully",
+                response
+            })
+        }
 
 
         const response = await DataModel.find({ brand: brand });
@@ -37,8 +47,6 @@ exports.getProductsByBrand = async (req, res) => {
 exports.getProductById = async (req, res) => {
     try {
         const { productId } = req.body
-        // console.log("getProductById");
-        // console.log(productId);
 
         const product = await DataModel.findById(productId)
 
@@ -68,8 +76,7 @@ exports.addWishlist = async (req, res) => {
     try {
         const { productId } = req.body
         const { user } = req
-        // console.log("addWishlist", productId);
-        // console.log(user.email);
+
 
         const userData = await UserModel.findOneAndUpdate({ email: user.email },
             {
@@ -79,8 +86,6 @@ exports.addWishlist = async (req, res) => {
             },
             { "new": true }
         ).populate("wishlist")
-        // console.log(userData);
-
 
         res.status(200).json({
             success: true,
@@ -282,21 +287,6 @@ exports.addToCart = async (req, res) => {
             }
         })
 
-        // const user = await UserModel.findOne({ email: email })
-        //     .populate({
-        //         path: 'address',
-        //         options: { sort: { createdAt: -1 } },
-        //     })
-        //     .populate("wishlist")
-        //     .populate({
-        //         path: "cart",
-        //         populate: {
-        //             path: "product"
-        //         }
-        //     })
-        //     .populate("address")
-        //     .exec();
-
         if (userData) {
             res.status(200).json({
                 success: true,
@@ -313,41 +303,6 @@ exports.addToCart = async (req, res) => {
         })
     }
 
-    // try {
-    //     const { productId } = req.body;
-
-    //     const { user } = req
-
-
-    //     if (!productId) {
-    //         return res.status(400).json({
-    //             success: false,
-    //             message: "Product Id required"
-    //         })
-    //     }
-
-    //     const userData = await UserModel.findByIdAndUpdate(user?._id, {
-    //         $push: {
-    //             cart: productId
-    //         }
-    //     }, { new: true }).populate("cart")
-
-    //     if (userData) {
-    //         return res.status(200).json({
-    //             success: true,
-    //             message: "Added to cart",
-    //             cart: userData.cart
-    //         })
-    //     }
-
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(400).json({
-    //         success: false,
-    //         message: "Failed to add in Cart"
-    //     })
-
-    // }
 }
 
 exports.removeFromCart = async (req, res) => {
@@ -477,20 +432,14 @@ exports.fetchOrders = async (req, res) => {
         }
 
         const orderDetail = await UserModel.findById(user._id).select("orders")
-            // .populate({
-            //     path: "address",
-            //     options: {
-            //         sort: { createdAt: -1 }
-            //     }
-            // })
-            // .populate("orders")
+
             .populate({
                 path: "orders",
-               
+
                 populate: {
                     path: "cartId",
                     populate: {
-                        path: "product",  
+                        path: "product",
                     },
                 },
             })
@@ -499,9 +448,6 @@ exports.fetchOrders = async (req, res) => {
                 options: { sort: { createdAt: -1 } },
                 populate: {
                     path: "address",
-                    // options: {
-                    //     sort: { createdAt: -1 }
-                    // }
                 }
             })
             .exec()

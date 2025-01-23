@@ -23,13 +23,6 @@ exports.otpMailSender = async (email, title, otp) => {
             html: `ModernMobiles verification OTP: ${otp} valid for 5 minutes.`, // html body
         });
 
-        // if(info){
-        //     res.status(200).json({
-        //         success: true,
-        //         message: "OTP sent successfully",
-        //     })
-        // }
-
         return info
 
     } catch (error) {
