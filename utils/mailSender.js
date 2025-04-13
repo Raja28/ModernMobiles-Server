@@ -33,8 +33,6 @@ exports.otpMailSender = async (email, title, otp) => {
 
 exports.orderMailSender = async (email, title, body) => {
     try {
-console.log("Sending orderf mail to", email);
-
         const transporter = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
             port: 587,
