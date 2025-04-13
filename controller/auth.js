@@ -61,7 +61,7 @@ exports.signup = async (req, res) => {
     try {
 
         const { firstName, lastName, otp, email, contact } = req.body
-  
+
 
         if (!firstName || !lastName || !otp || !email || !contact) {
             return res.status(400).json({
@@ -89,7 +89,7 @@ exports.signup = async (req, res) => {
                 message: "otp not found or expired!"
             })
         }
-     
+
 
         if (recentOTP[0].otp !== parseInt(otp)) {
             return res.status(400).json({
@@ -123,8 +123,14 @@ exports.signup = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    const guestEmail = 'email@guest.com'
     try {
         const { email, otp } = req.body
+
+        if (email === guestEmail) {
+             this.guestLogin(res)
+             return
+        }
 
         if (!email || !otp) {
             return res.status(400).json({
@@ -196,7 +202,7 @@ exports.login = async (req, res) => {
         }
 
     } catch (error) {
-        console.log("singup failed ", error);
+        console.log("login failed ", error);
         return res.status(500).json({
             success: false,
             message: "Error while login. Try again"
@@ -204,3 +210,55 @@ exports.login = async (req, res) => {
     }
 }
 
+//this is just for guest login. Validation not included.
+exports.guestLogin = async (res) => {
+    try {
+        const email = 'rajadavid03@gmail.com'
+
+        const user = await UserModel.findOne({ email: email })
+            .populate({
+                path: 'address',
+                options: {
+                    sort: { createdAt: -1 }
+                },
+            })
+            .populate("wishlist")
+            .populate({
+                path: "cart",
+                populate: {
+                    path: "product"
+                }
+            })
+            .exec();
+
+
+        const jwtPayload = {
+            _id: user._id,
+            email: user.email
+        }
+
+        const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "7d" })
+
+        user.token = token;
+
+        const options = {
+            expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            httpOnly: true
+        }
+
+        res.cookie("token", token, options).status(200).json({
+            success: true,
+            message: "login successfull",
+            user,
+            token
+        })
+
+
+    } catch (error) {
+        console.log("guest login failed ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error while login. Try again"
+        })
+    }
+}
